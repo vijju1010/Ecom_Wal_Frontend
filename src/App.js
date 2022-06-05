@@ -1,25 +1,37 @@
 import logo from './logo.svg';
 import './App.css';
-
+import Login from './Components/Login';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { checkAuthAsync, logout } from './Store/user.slice';
+import { useNavigate, Link } from 'react-router-dom';
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { user } = useSelector((state) => state.user);
+    console.log(user);
+    useEffect(() => {
+        dispatch(checkAuthAsync());
+        if (!user.isLoggedIn) {
+            navigate('/login');
+        }
+    }, [dispatch, navigate, user.isLoggedIn]);
+    return (
+        <div className='App'>
+            This is main Page
+            <Link to='/products'>Products</Link>
+            <br />
+            <Link to='/categories'>Categories</Link>
+            <br />
+            <button
+                onClick={() => {
+                    dispatch(logout());
+                    navigate('/login');
+                }}>
+                Logout
+            </button>
+        </div>
+    );
 }
 
 export default App;
