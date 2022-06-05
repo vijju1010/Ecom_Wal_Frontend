@@ -91,7 +91,6 @@ export const checkAuthAsync = () => async (dispatch) => {
 
 export const RegisterAsync =
     (name, email, password, phonenumber) => async (dispatch) => {
-        console.log('RegisterAsync', name, email, password);
         const response = await fetch('http://localhost:3000/api/register', {
             method: 'POST',
             headers: {
