@@ -9,7 +9,6 @@ function App() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.user);
-    console.log(user);
     useEffect(() => {
         dispatch(checkAuthAsync());
         if (!user.isLoggedIn) {
@@ -19,9 +18,15 @@ function App() {
     return (
         <div className='App'>
             This is main Page
-            <Link to='/products'>Products</Link>
+            {/* <Link to='/products'>Products</Link> */}
             <br />
             <Link to='/categories'>Categories</Link>
+            <br />
+            {user.isAdmin ? (
+                <>
+                    <Link to='/admin'>Admin</Link>
+                </>
+            ) : null}
             <br />
             <button
                 onClick={() => {

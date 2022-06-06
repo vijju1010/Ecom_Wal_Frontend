@@ -6,7 +6,6 @@ const SignUp = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { user } = useSelector((state) => state.user);
-    console.log(user);
     useEffect(() => {
         if (user.isLoggedIn) {
             navigate('/');
@@ -29,7 +28,6 @@ const SignUp = () => {
         } else {
             alert('Passwords do not match');
         }
-        // console.log(e.target.elements);
     };
     return (
         <div>

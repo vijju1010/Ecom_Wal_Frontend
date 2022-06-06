@@ -16,40 +16,44 @@ const Products = () => {
         dispatch(checkAuthAsync());
         dispatch(getProductsByCategoryAsync(categoryId));
     }, [dispatch]);
-    console.log(products);
 
     return (
         <div>
             {products.length > 0 ? (
                 <>
-                    {products.map((product) => {
-                        return (
-                            <div key={product.id}>
-                                {/* <img src={product.image} alt={product.name} /> */}
-                                <p>{product.productname}</p>
-                                <p>{product.price}</p>
-                                {user.isAdmin ? (
-                                    <>
-                                        <button
-                                            onClick={() =>
-                                                dispatch(
-                                                    disableProductAsync(
-                                                        product.id,
-                                                        product.disabled
+                    <section className='vh-100 gradient-custom'>
+                        <div className='fw-bold mb-2 text-uppercase'>
+                            <h2>Products</h2>
+                        </div>
+                        {products.map((product) => {
+                            return (
+                                <div key={product.id}>
+                                    {/* <img src={product.image} alt={product.name} /> */}
+                                    <p>{product.productname}</p>
+                                    <p>{product.price}</p>
+                                    {user.isAdmin ? (
+                                        <>
+                                            <button
+                                                onClick={() =>
+                                                    dispatch(
+                                                        disableProductAsync(
+                                                            product.id,
+                                                            product.disabled
+                                                        )
                                                     )
-                                                )
-                                            }>
-                                            {product.disabled
-                                                ? 'Enable'
-                                                : 'Disable'}
-                                        </button>
-                                    </>
-                                ) : (
-                                    <></>
-                                )}
-                            </div>
-                        );
-                    })}
+                                                }>
+                                                {product.disabled
+                                                    ? 'Enable'
+                                                    : 'Disable'}
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <></>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </section>
                 </>
             ) : (
                 <>No Products</>

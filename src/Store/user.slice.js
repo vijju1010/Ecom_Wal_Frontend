@@ -35,7 +35,6 @@ export const { setUser, setToken } = userSlice.actions;
 export default userSlice.reducer;
 
 export const loginAsync = (email, password) => async (dispatch) => {
-    console.log('loginAsync', email, password);
     const response = await fetch('http://localhost:3000/api/login', {
         method: 'POST',
         headers: {
@@ -61,7 +60,6 @@ export const loginAsync = (email, password) => async (dispatch) => {
 
 export const checkAuthAsync = () => async (dispatch) => {
     const token = localStorage.getItem('token');
-    console.log(token !== undefined, 'token');
     if (token) {
         const response = await fetch('http://localhost:3000/api/checkauth', {
             headers: {

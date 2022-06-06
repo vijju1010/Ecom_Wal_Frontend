@@ -93,3 +93,41 @@ export const disableProductAsync =
             console.log("Can't disable this product");
         }
     };
+export const addCategoryAsync = (category) => async (dispatch) => {
+    console.log(category, 'category');
+    const response = await fetch('http://localhost:3000/api/categories', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ category }),
+    });
+    const data = await response.json();
+    if (data.success) {
+        dispatch(getCategoriesAsync());
+    } else {
+        dispatch(setErrorMessage("Can't add category"));
+    }
+};
+export const addProductAsync =
+    (productname, price, categoryId) => async (dispatch) => {
+        console.log(
+            productname,
+            price,
+            categoryId,
+            'productname, price, categoryId'
+        );
+        const response = await fetch('http://localhost:3000/api/products', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ productname, price, categoryId }),
+        });
+        const data = await response.json();
+        if (data.success) {
+            dispatch(getCategoriesAsync());
+        } else {
+            dispatch(setErrorMessage("Can't add product"));
+        }
+    };

@@ -10,6 +10,8 @@ import Login from './Components/Login';
 import Products from './Components/Products';
 import Categories from './Components/Categories';
 import SignUp from './Components/SignUp';
+import Admin from './Components/Admin';
+import AddCategoryOrProduct from './Components/AddCategoryOrProduct';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
@@ -19,9 +21,18 @@ root.render(
                     <Route path='/' element={<App />} />
                     <Route path='/login' element={<Login />} />
                     <Route path='/Signup' element={<SignUp />} />
+                    <Route path='/admin' element={<Admin />} />
                     <Route
                         path='/products/:categoryId'
                         element={<Products />}
+                    />
+                    <Route
+                        path='/add-category'
+                        element={<AddCategoryOrProduct />}
+                    />
+                    <Route
+                        path='/add-product'
+                        element={<AddCategoryOrProduct />}
                     />
                     <Route path='/categories' element={<Categories />} />
                 </Routes>
