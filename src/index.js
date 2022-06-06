@@ -12,6 +12,8 @@ import Categories from './Components/Categories';
 import SignUp from './Components/SignUp';
 import Admin from './Components/Admin';
 import AddCategoryOrProduct from './Components/AddCategoryOrProduct';
+import Cart from './Components/Cart';
+import ReceivedOrders from './Components/ReceivedOrders';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
@@ -30,11 +32,16 @@ root.render(
                         path='/add-category'
                         element={<AddCategoryOrProduct />}
                     />
+                    <Route path='/cart' element={<Cart />} />
                     <Route
                         path='/add-product'
                         element={<AddCategoryOrProduct />}
                     />
                     <Route path='/categories' element={<Categories />} />
+                    <Route
+                        path='/receivedorders'
+                        element={<ReceivedOrders />}
+                    />
                 </Routes>
             </BrowserRouter>
         </Provider>

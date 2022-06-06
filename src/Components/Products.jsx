@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkAuthAsync } from '../Store/user.slice';
+import { addToCartAsync, placeOrderAsync } from '../Store/products.slice';
 import {
     getProductsByCategoryAsync,
     disableProductAsync,
@@ -48,7 +49,38 @@ const Products = () => {
                                             </button>
                                         </>
                                     ) : (
-                                        <></>
+                                        <>
+                                            {product.disabled ? (
+                                                <p>disabled</p>
+                                            ) : (
+                                                <>
+                                                    <button
+                                                        onClick={() =>
+                                                            dispatch(
+                                                                addToCartAsync(
+                                                                    product.id,
+                                                                    localStorage.getItem(
+                                                                        'token'
+                                                                    )
+                                                                )
+                                                            )
+                                                        }>
+                                                        Add to Cart
+                                                    </button>
+                                                    <br />
+                                                    <button
+                                                        onClick={() =>
+                                                            dispatch(
+                                                                placeOrderAsync(
+                                                                    product.id
+                                                                )
+                                                            )
+                                                        }>
+                                                        Buy Now
+                                                    </button>
+                                                </>
+                                            )}
+                                        </>
                                     )}
                                 </div>
                             );

@@ -26,7 +26,11 @@ function App() {
                 <>
                     <Link to='/admin'>Admin</Link>
                 </>
-            ) : null}
+            ) : (
+                <>
+                    <Link to='/cart'>Cart</Link>
+                </>
+            )}
             <br />
             <button
                 onClick={() => {

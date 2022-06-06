@@ -26,6 +26,7 @@ const Admin = () => {
                             Add Categories and Products
                         </Link>
                         <br />
+                        <Link to='/receivedorders'>Received Orders</Link>
                     </div>
                 </div>
                 /
