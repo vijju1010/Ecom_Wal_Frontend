@@ -22,9 +22,10 @@ const Admin = () => {
                     <div className='row d-flex justify-content-center align-items-center h-30'>
                         <Link to='/categories'>Categories</Link>
                         <br />
-                        <Link to='/add-category'>Add Category</Link>
+                        <Link to='/add-category'>
+                            Add Categories and Products
+                        </Link>
                         <br />
-                        <Link to='add-product'>Add Product</Link>
                     </div>
                 </div>
                 /

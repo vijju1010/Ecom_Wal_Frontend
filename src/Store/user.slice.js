@@ -94,7 +94,13 @@ export const RegisterAsync =
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ name, email, password, phonenumber }),
+            body: JSON.stringify({
+                name,
+                email,
+                password,
+                phonenumber,
+                role: 'user',
+            }),
         });
         const data = await response.json();
         if (data.success) {
@@ -110,6 +116,28 @@ export const RegisterAsync =
             dispatch(setToken(data.token));
         }
         return data;
+    };
+
+export const AddDriverAsync =
+    (name, email, password, phonenumber) => async (dispatch) => {
+        const response = await fetch('http://localhost:3000/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name,
+                email,
+                password,
+                phonenumber,
+                role: 'driver',
+            }),
+        });
+        const data = await response.json();
+        if (data.success) {
+            console.log(data);
+            console.log('driver added');
+        }
     };
 
 export const logout = () => (dispatch) => {
