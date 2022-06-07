@@ -4,7 +4,7 @@ const initialState = {
     cart: [],
     categories: [],
     receivedorders: [],
-    placedorders: [],
+    placedorders: {},
     errorMessage: '',
 };
 export const productsSlice = createSlice({
@@ -18,6 +18,9 @@ export const productsSlice = createSlice({
             if (index !== -1) {
                 state.products[index] = action.payload;
             }
+        },
+        setPlacedOrders: (state, action) => {
+            state.placedorders = action.payload;
         },
         setReceivedOrders: (state, action) => {
             state.receivedorders = action.payload;
@@ -42,6 +45,7 @@ export const {
     setCategories,
     updateProduct,
     setReceivedOrders,
+    setPlacedOrders,
     setErrorMessage,
 } = productsSlice.actions;
 export default productsSlice.reducer;
@@ -111,6 +115,7 @@ export const addToCartAsync = (productId, token) => async (dispatch) => {
 };
 
 export const placeOrderAsync = (productId) => async (dispatch) => {
+    console.log(productId);
     const token = localStorage.getItem('token');
     if (token) {
         const response = await fetch('http://localhost:3000/api/placeorder', {
@@ -129,6 +134,25 @@ export const placeOrderAsync = (productId) => async (dispatch) => {
         }
     } else {
         dispatch(setErrorMessage("Can't place order"));
+    }
+};
+
+export const getPlacedOrdersAsync = () => async (dispatch) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        const response = await fetch(`http://localhost:3000/api/placedorders`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        const data = await response.json();
+        if (data.success) {
+            console.log('Orders placed', data.placedorders);
+            dispatch(setPlacedOrders(data.placedorders));
+        } else {
+            dispatch(setErrorMessage("Can't get placed orders"));
+            console.log("Can't get placed orders");
+        }
     }
 };
 

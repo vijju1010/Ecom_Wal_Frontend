@@ -14,16 +14,21 @@ import Admin from './Components/Admin';
 import AddCategoryOrProduct from './Components/AddCategoryOrProduct';
 import Cart from './Components/Cart';
 import ReceivedOrders from './Components/ReceivedOrders';
+import Profile from './Components/Profile';
+import AllProducts from './Components/AllProducts';
+import PlacedOrders from './Components/PlacedOrders';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
         <Provider store={store}>
             <BrowserRouter>
+                <App />
                 <Routes>
-                    <Route path='/' element={<App />} />
+                    <Route path='/' element={<Categories />} />
                     <Route path='/login' element={<Login />} />
                     <Route path='/Signup' element={<SignUp />} />
                     <Route path='/admin' element={<Admin />} />
+                    <Route path='/profile' element={<Profile />} />
                     <Route
                         path='/products/:categoryId'
                         element={<Products />}
@@ -33,6 +38,7 @@ root.render(
                         element={<AddCategoryOrProduct />}
                     />
                     <Route path='/cart' element={<Cart />} />
+                    <Route path='/products' element={<AllProducts />} />
                     <Route
                         path='/add-product'
                         element={<AddCategoryOrProduct />}
@@ -42,6 +48,7 @@ root.render(
                         path='/receivedorders'
                         element={<ReceivedOrders />}
                     />
+                    <Route path='/placedorders' element={<PlacedOrders />} />
                 </Routes>
             </BrowserRouter>
         </Provider>

@@ -11,10 +11,9 @@ const SignUp = () => {
             navigate('/');
         }
     }, [user, navigate]);
-
+    console.log(user);
     const submitHandler = (e) => {
         e.preventDefault();
-
         if (e.target.password.value === e.target.cnfpassword.value) {
             dispatch(
                 RegisterAsync(

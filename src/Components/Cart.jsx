@@ -34,7 +34,7 @@ const Cart = () => {
                     </section>
                 </>
             ) : (
-                <>Loading cart</>
+                <>cart is empty</>
             )}
         </div>
     );

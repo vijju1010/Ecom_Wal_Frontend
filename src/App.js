@@ -11,34 +11,94 @@ function App() {
     const { user } = useSelector((state) => state.user);
     useEffect(() => {
         dispatch(checkAuthAsync());
-        if (!user.isLoggedIn) {
-            navigate('/login');
-        }
+        // if (!user.isLoggedIn) {
+        //     navigate('/login');
+        // }
     }, [dispatch, navigate, user.isLoggedIn]);
     return (
-        <div className='App'>
-            This is main Page
-            {/* <Link to='/products'>Products</Link> */}
-            <br />
-            <Link to='/categories'>Categories</Link>
-            <br />
-            {user.isAdmin ? (
-                <>
-                    <Link to='/admin'>Admin</Link>
-                </>
-            ) : (
-                <>
-                    <Link to='/cart'>Cart</Link>
-                </>
-            )}
-            <br />
-            <button
-                onClick={() => {
-                    dispatch(logout());
-                    navigate('/login');
-                }}>
-                Logout
-            </button>
+        <div>
+            <div className='navbar navbar-expand-lg  navbar-dark bg-dark sticky-top'>
+                <Link to='/' className='navbar-brand'>
+                    <img src={logo} alt='logo' width='30' height='30' />
+                    <span className='d-none d-sm-inline-block'>ECOM</span>
+                </Link>
+                <div className='collapse navbar-collapse'>
+                    <ul className='navbar-nav  mr-auto mt-2 mt-lg-0'>
+                        <li className='nav-item active'>
+                            <Link to='/products' className='nav-link'>
+                                Products
+                            </Link>
+                        </li>
+                    </ul>
+                </div>
+                <div className='navbar-nav ml-auto p-2'>
+                    {user.isLoggedIn ? (
+                        user.isAdmin ? (
+                            <>
+                                <li className='nav-item'>
+                                    <Link to='/admin' className='nav-link'>
+                                        Admin
+                                    </Link>
+                                </li>
+                            </>
+                        ) : (
+                            <>
+                                <li className='nav-item'>
+                                    <Link to='/profile' className='nav-link'>
+                                        Profile
+                                    </Link>
+                                </li>
+                            </>
+                        )
+                    ) : (
+                        <></>
+                    )}
+                    {user.isLoggedIn ? (
+                        <>
+                            {user.isAdmin ? (
+                                <>
+                                    <li className='nav-item'>
+                                        <Link
+                                            to='/receivedorders'
+                                            className='nav-link'>
+                                            Received Orders
+                                        </Link>
+                                    </li>
+                                </>
+                            ) : (
+                                <li className='nav-item'>
+                                    <Link to='/cart' className='nav-link'>
+                                        Cart
+                                    </Link>
+                                </li>
+                            )}
+                            <li className='nav-item'>
+                                <button
+                                    className='btn btn-danger'
+                                    onClick={() => {
+                                        dispatch(logout());
+                                        navigate('/login');
+                                    }}>
+                                    Logout
+                                </button>
+                            </li>
+                        </>
+                    ) : (
+                        <>
+                            <li className='nav-item'>
+                                <Link to='/login' className='nav-link'>
+                                    Login
+                                </Link>
+                            </li>
+                            <li className='nav-item'>
+                                <Link to='/Signup' className='nav-link'>
+                                    Register
+                                </Link>
+                            </li>
+                        </>
+                    )}
+                </div>
+            </div>
         </div>
     );
 }
