@@ -35,7 +35,7 @@ export const { setUser, setToken } = userSlice.actions;
 export default userSlice.reducer;
 
 export const loginAsync = (email, password) => async (dispatch) => {
-    const response = await fetch('http://localhost:3000/api/login', {
+    const response = await fetch('http://localhost:3000/auth/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ export const loginAsync = (email, password) => async (dispatch) => {
 export const checkAuthAsync = () => async (dispatch) => {
     const token = localStorage.getItem('token');
     if (token) {
-        const response = await fetch('http://localhost:3000/api/checkauth', {
+        const response = await fetch('http://localhost:3000/auth/checkauth', {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -89,7 +89,7 @@ export const checkAuthAsync = () => async (dispatch) => {
 
 export const RegisterAsync =
     (name, email, password, phonenumber) => async (dispatch) => {
-        const response = await fetch('http://localhost:3000/api/register', {
+        const response = await fetch('http://localhost:3000/auth/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

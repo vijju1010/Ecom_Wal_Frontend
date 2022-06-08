@@ -20,16 +20,14 @@ const Admin = () => {
             <section className='vh-100 gradient-custom'>
                 <div className='container py-5 h-100'>
                     <div className='row d-flex justify-content-center align-items-center h-30'>
-                        <Link to='/categories'>Categories</Link>
+                        <Link to='/add-category'>Add Categories</Link>
                         <br />
-                        <Link to='/add-category'>
-                            Add Categories and Products
-                        </Link>
+                        <Link to='/add-product'>Add Product</Link>
                         <br />
-                        <Link to='/receivedorders'>Received Orders</Link>
+                        <Link to='/adddriver'>Add Driver</Link>
+                        <br />
                     </div>
                 </div>
-                /
             </section>
         </div>
     );

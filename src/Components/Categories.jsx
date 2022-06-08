@@ -31,6 +31,8 @@ const Categories = () => {
                                         <p className='card-text'>
                                             {category.description}
                                         </p>
+                                    </div>
+                                    <div className='card-footer bg-white'>
                                         <Link to={`/products/${category.id}`}>
                                             <button className='btn btn-primary'>
                                                 View Products

@@ -40,11 +40,11 @@ const Products = () => {
                                             <p className='card-text'>
                                                 {product.description}
                                             </p>
-                                        </div>
-                                        <div className='card-footer rounded'>
                                             <p className='text-muted'>
                                                 Price : {product.price}
                                             </p>
+                                        </div>
+                                        <div className='card-footer rounded'>
                                             <div className='d-flex justify-content-around'>
                                                 {user.isAdmin ? (
                                                     <>

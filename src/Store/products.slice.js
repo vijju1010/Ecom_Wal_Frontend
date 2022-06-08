@@ -6,6 +6,7 @@ const initialState = {
     receivedorders: [],
     placedorders: {},
     errorMessage: '',
+    product: {},
 };
 export const productsSlice = createSlice({
     name: 'products',
@@ -18,6 +19,9 @@ export const productsSlice = createSlice({
             if (index !== -1) {
                 state.products[index] = action.payload;
             }
+        },
+        setProduct: (state, action) => {
+            state.product = action.payload;
         },
         setPlacedOrders: (state, action) => {
             state.placedorders = action.payload;
@@ -46,6 +50,7 @@ export const {
     updateProduct,
     setReceivedOrders,
     setPlacedOrders,
+    setProduct,
     setErrorMessage,
 } = productsSlice.actions;
 export default productsSlice.reducer;
@@ -78,7 +83,16 @@ export const getProductsByCategoryAsync = (categoryId) => async (dispatch) => {
         console.log("Can't get products in this category");
     }
 };
-
+export const getProductAsync = (id) => async (dispatch) => {
+    const response = await fetch(`http://localhost:3000/api/product/${id}`);
+    const data = await response.json();
+    if (data.success) {
+        dispatch(setProduct(data.product));
+    } else {
+        dispatch(setErrorMessage("Can't get product"));
+        console.log("Can't get product");
+    }
+};
 export const getCartAsync = () => async (dispatch) => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -93,6 +107,27 @@ export const getCartAsync = () => async (dispatch) => {
         } else {
             dispatch(setErrorMessage("Can't get cart"));
             console.log("Can't get cart");
+        }
+    }
+};
+export const removeFromCartAsync = (productId) => async (dispatch) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        const response = await fetch(
+            `http://localhost:3000/api/cart/${productId}`,
+            {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        const data = await response.json();
+        if (data.success) {
+            dispatch(getCartAsync());
+        } else {
+            dispatch(setErrorMessage("Can't remove from cart"));
+            console.log("Can't remove from cart");
         }
     }
 };
@@ -137,6 +172,54 @@ export const placeOrderAsync = (productId) => async (dispatch) => {
     }
 };
 
+export const setOrderStatusAsync = (orderId, status) => async (dispatch) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        const response = await fetch(
+            `http://localhost:3000/admin/setorderstatus/${orderId}`,
+            {
+                method: 'PUT',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ status }),
+            }
+        );
+        const data = await response.json();
+        if (data.success) {
+            dispatch(getReceivedOrdersAsync());
+        } else {
+            dispatch(setErrorMessage(data.error));
+        }
+    } else {
+        dispatch(setErrorMessage("Can't accept order"));
+    }
+};
+
+export const cancelOrderAsync = (orderId) => async (dispatch) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        const response = await fetch(
+            `http://localhost:3000/api/cancelorder/${orderId}`,
+            {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        const data = await response.json();
+        if (data.success) {
+            dispatch(getPlacedOrdersAsync());
+        } else {
+            dispatch(setErrorMessage(data.error));
+        }
+    } else {
+        dispatch(setErrorMessage("Can't cancel order"));
+    }
+};
+
 export const getPlacedOrdersAsync = () => async (dispatch) => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -158,20 +241,27 @@ export const getPlacedOrdersAsync = () => async (dispatch) => {
 
 export const disableProductAsync =
     (productId, disabled) => async (dispatch) => {
-        const response = await fetch(
-            `http://localhost:3000/api/products/${productId}/disable`,
-            {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ disabled }),
+        const token = localStorage.getItem('token');
+        if (token) {
+            const response = await fetch(
+                `http://localhost:3000/admin/products/${productId}/disable`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ disabled }),
+                }
+            );
+            const data = await response.json();
+            if (data.success) {
+                // dispatch(setProducts(data.products));
+                dispatch(updateProduct(data.product));
+            } else {
+                dispatch(setErrorMessage("Can't disable this product"));
+                console.log("Can't disable this product");
             }
-        );
-        const data = await response.json();
-        if (data.success) {
-            // dispatch(setProducts(data.products));
-            dispatch(updateProduct(data.product));
         } else {
             dispatch(setErrorMessage("Can't disable this product"));
             console.log("Can't disable this product");
@@ -182,7 +272,7 @@ export const getReceivedOrdersAsync = () => async (dispatch) => {
     const token = localStorage.getItem('token');
     if (token) {
         const response = await fetch(
-            'http://localhost:3000/api/receivedorders',
+            'http://localhost:3000/admin/receivedorders',
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -200,33 +290,48 @@ export const getReceivedOrdersAsync = () => async (dispatch) => {
 };
 
 export const addCategoryAsync = (category) => async (dispatch) => {
-    const response = await fetch('http://localhost:3000/api/categories', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ category }),
-    });
-    const data = await response.json();
-    if (data.success) {
-        dispatch(getCategoriesAsync());
-    } else {
-        dispatch(setErrorMessage("Can't add category"));
-    }
-};
-export const addProductAsync =
-    (productname, price, categoryId) => async (dispatch) => {
-        const response = await fetch('http://localhost:3000/api/products', {
+    const token = localStorage.getItem('token');
+    if (token) {
+        const response = await fetch('http://localhost:3000/admin/categories', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({ productname, price, categoryId }),
+            body: JSON.stringify({ category }),
         });
         const data = await response.json();
         if (data.success) {
             dispatch(getCategoriesAsync());
         } else {
-            dispatch(setErrorMessage("Can't add product"));
+            dispatch(setErrorMessage("Can't add category"));
+        }
+    } else {
+        dispatch(setErrorMessage("Can't add category without token"));
+    }
+};
+export const addProductAsync =
+    (productname, price, categoryId) => async (dispatch) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            const response = await fetch(
+                'http://localhost:3000/admin/products',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ productname, price, categoryId }),
+                }
+            );
+            const data = await response.json();
+            if (data.success) {
+                dispatch(getCategoriesAsync());
+            } else {
+                dispatch(setErrorMessage("Can't add product"));
+            }
+        } else {
+            dispatch(setErrorMessage("Can't add product without token"));
         }
     };

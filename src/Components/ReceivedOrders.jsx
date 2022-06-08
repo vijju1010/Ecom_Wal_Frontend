@@ -1,60 +1,93 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
-import { getReceivedOrdersAsync } from '../Store/products.slice';
+import {
+    getReceivedOrdersAsync,
+    setOrderStatusAsync,
+} from '../Store/products.slice';
+import '../App.css';
 
 const ReceivedOrders = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { receivedorders } = useSelector((state) => state.products);
     console.log(receivedorders);
+    var c = 1;
     useEffect(() => {
         dispatch(getReceivedOrdersAsync());
     }, [dispatch]);
     return (
         <div>
             {receivedorders.length > 0 ? (
-                <section className='vh-100 gradient-custom'>
-                    <div className='fw-bold mb-2 text-uppercase'>
-                        <h2>Received Orders</h2>
-                    </div>
-                    <div className='form-outline form-white mb-4'>
-                        <ul>
-                            {receivedorders.map((user, ind) => {
-                                return user.orders.length > 0 ? (
-                                    <li key={ind}>
-                                        <p>user : {user.name}</p>
-                                        <p>Email : {user.email}</p>
-                                        {/* <p>{user.address}</p> */}
-                                        <p>Phone : {user.phonenumber}</p>
-                                        <ul>
-                                            {user.orders.map((order, index) => {
-                                                return (
-                                                    <li key={index}>
-                                                        <p>
-                                                            Product Name :
-                                                            {
-                                                                order
-                                                                    .order_products[0]
-                                                                    .product
-                                                                    .productname
-                                                            }
-                                                        </p>
-                                                        <p>{order.price}</p>
-                                                    </li>
-                                                );
-                                            })}
-                                        </ul>
-                                    </li>
-                                ) : (
-                                    <></>
-                                );
+                <>
+                    <table className='table table-striped table-light table-hover table-responsive table-sortable mt-5 container border py-2'>
+                        <thead>
+                            <tr>
+                                <th>S No</th>
+                                <th>User Name</th>
+                                <th>Order ID</th>
+                                <th>Product </th>
+                                <th>Price</th>
+                                <th>Order Date</th>
+                                <th>Order Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {receivedorders.map((user, index) => {
+                                return user.orders.map((order, index) => (
+                                    <tr key={index}>
+                                        <td>{c++}</td>
+                                        <td>{user.name}</td>
+                                        <td>{order.id}</td>
+                                        <td>
+                                            {order.orderProducts[0].productname}
+                                        </td>
+                                        <td>{order.orderProducts[0].price}</td>
+                                        <td>{order.createdAt}</td>
+                                        <td>{order.status}</td>
+                                        <td>
+                                            {order.status ===
+                                            'Order Accepted Yet Pick Up from Store' ? (
+                                                <>
+                                                    <button
+                                                        className='btn btn-primary'
+                                                        onClick={() => {
+                                                            dispatch(
+                                                                setOrderStatusAsync(
+                                                                    order.id,
+                                                                    'Order Pending'
+                                                                )
+                                                            );
+                                                        }}>
+                                                        Set Order Pending
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <button
+                                                        className='btn btn-primary'
+                                                        onClick={() => {
+                                                            dispatch(
+                                                                setOrderStatusAsync(
+                                                                    order.id,
+                                                                    'Order Accepted Yet Pick Up from Store'
+                                                                )
+                                                            );
+                                                        }}>
+                                                        Accept Order
+                                                    </button>
+                                                </>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ));
                             })}
-                        </ul>
-                    </div>
-                </section>
+                        </tbody>
+                    </table>
+                </>
             ) : (
-                <>Loading received orders</>
+                <>No received orders</>
             )}
         </div>
     );

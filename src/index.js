@@ -17,6 +17,9 @@ import ReceivedOrders from './Components/ReceivedOrders';
 import Profile from './Components/Profile';
 import AllProducts from './Components/AllProducts';
 import PlacedOrders from './Components/PlacedOrders';
+import { Product } from './Components/Product';
+import AddDriver from './Components/AddDriver';
+import AddProduct from './Components/AddProduct';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
@@ -28,11 +31,14 @@ root.render(
                     <Route path='/login' element={<Login />} />
                     <Route path='/Signup' element={<SignUp />} />
                     <Route path='/admin' element={<Admin />} />
+                    <Route path='/adddriver' element={<AddDriver />} />
+
                     <Route path='/profile' element={<Profile />} />
                     <Route
                         path='/products/:categoryId'
                         element={<Products />}
                     />
+                    <Route path='/product/:productId' element={<Product />} />
                     <Route
                         path='/add-category'
                         element={<AddCategoryOrProduct />}
@@ -41,7 +47,7 @@ root.render(
                     <Route path='/products' element={<AllProducts />} />
                     <Route
                         path='/add-product'
-                        element={<AddCategoryOrProduct />}
+                        element={<AddProduct />}
                     />
                     <Route path='/categories' element={<Categories />} />
                     <Route

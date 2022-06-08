@@ -9,6 +9,7 @@ function App() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.user);
+    console.log(user);
     useEffect(() => {
         dispatch(checkAuthAsync());
         // if (!user.isLoggedIn) {
@@ -23,13 +24,13 @@ function App() {
                     <span className='d-none d-sm-inline-block'>ECOM</span>
                 </Link>
                 <div className='collapse navbar-collapse'>
-                    <ul className='navbar-nav  mr-auto mt-2 mt-lg-0'>
+                    {/* <ul className='navbar-nav  mr-auto mt-2 mt-lg-0'>
                         <li className='nav-item active'>
                             <Link to='/products' className='nav-link'>
                                 Products
                             </Link>
                         </li>
-                    </ul>
+                    </ul> */}
                 </div>
                 <div className='navbar-nav ml-auto p-2'>
                     {user.isLoggedIn ? (
