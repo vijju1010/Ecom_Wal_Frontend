@@ -4,6 +4,7 @@ import { useNavigate, useParams, Link } from 'react-router-dom';
 import {
     getCartAsync,
     removeFromCartAsync,
+    checkoutCartAsync,
     placeOrderAsync,
 } from '../Store/products.slice';
 const Cart = () => {
@@ -77,26 +78,35 @@ const Cart = () => {
                                                                 Buy Product
                                                             </button>
                                                         </div>{' '}
-                                                        <div>
-                                                            <button
-                                                                className='btn btn-primary bg-light text-dark w-100'
-                                                                onClick={() => {
-                                                                    dispatch(
-                                                                        removeFromCartAsync(
-                                                                            product.id
-                                                                        )
-                                                                    );
-                                                                }}>
-                                                                Remove from Cart
-                                                            </button>
-                                                        </div>
                                                     </>
                                                 )}
+                                                <div>
+                                                    <button
+                                                        className='btn btn-primary bg-light text-dark w-100'
+                                                        onClick={() => {
+                                                            dispatch(
+                                                                removeFromCartAsync(
+                                                                    product.id
+                                                                )
+                                                            );
+                                                        }}>
+                                                        Remove from Cart
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             ))}
+                        </div>
+                        <div className='text-center w-100'>
+                            <button
+                                className='btn btn-info'
+                                onClick={() => {
+                                    dispatch(checkoutCartAsync());
+                                }}>
+                                Checkout Cart
+                            </button>
                         </div>
                     </div>
                 </>

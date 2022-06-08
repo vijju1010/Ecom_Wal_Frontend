@@ -195,6 +195,28 @@ export const setOrderStatusAsync = (orderId, status) => async (dispatch) => {
         dispatch(setErrorMessage("Can't accept order"));
     }
 };
+export const checkoutCartAsync = () => async (dispatch) => {
+    const token = localStorage.getItem('token');
+    const { address, totalprice } = { address: 'vskp', totalprice: '100' };
+    if (token) {
+        const response = await fetch('http://localhost:3000/api/checkout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ address, totalprice }),
+        });
+        const data = await response.json();
+        if (data.success) {
+            dispatch(getCartAsync());
+        } else {
+            dispatch(setErrorMessage(data.error));
+        }
+    } else {
+        dispatch(setErrorMessage("Can't checkout"));
+    }
+};
 
 export const getReceivedOrdersforDriverAsync =
     (driverId) => async (dispatch) => {
