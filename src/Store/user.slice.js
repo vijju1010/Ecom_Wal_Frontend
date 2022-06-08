@@ -5,6 +5,7 @@ const nullUser = {
     name: null,
     email: null,
     isAdmin: false,
+    isDriver: false,
     isLoggedIn: false,
 };
 const initialState = {
@@ -13,6 +14,7 @@ const initialState = {
         name: null,
         email: null,
         isAdmin: false,
+        isDriver: false,
         isLoggedIn: false,
     },
     token: null,
@@ -50,6 +52,7 @@ export const loginAsync = (email, password) => async (dispatch) => {
                 name: data.user.name,
                 email: data.user.email,
                 isAdmin: data.user.roleId === 1,
+                isDriver: data.user.roleId === 3,
                 isLoggedIn: true,
             })
         );
@@ -75,6 +78,7 @@ export const checkAuthAsync = () => async (dispatch) => {
                     name: user.data.name,
                     email: user.data.email,
                     isAdmin: user.data.roleId === 1,
+                    isDriver: user.data.roleId === 3,
                     isLoggedIn: true,
                 })
             );
@@ -110,6 +114,7 @@ export const RegisterAsync =
                     name: data.user.name,
                     email: data.user.email,
                     isAdmin: data.user.roleId === 1,
+                    isDriver: data.user.roleId === 3,
                     isLoggedIn: true,
                 })
             );
@@ -120,7 +125,7 @@ export const RegisterAsync =
 
 export const AddDriverAsync =
     (name, email, password, phonenumber) => async (dispatch) => {
-        const response = await fetch('http://localhost:3000/api/register', {
+        const response = await fetch('http://localhost:3000/auth/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -135,7 +140,7 @@ export const AddDriverAsync =
         });
         const data = await response.json();
         if (data.success) {
-            console.log(data);
+            // console.log(data);
             console.log('driver added');
         }
     };

@@ -9,12 +9,8 @@ function App() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.user);
-    console.log(user);
     useEffect(() => {
         dispatch(checkAuthAsync());
-        // if (!user.isLoggedIn) {
-        //     navigate('/login');
-        // }
     }, [dispatch, navigate, user.isLoggedIn]);
     return (
         <div>
@@ -44,11 +40,19 @@ function App() {
                             </>
                         ) : (
                             <>
-                                <li className='nav-item'>
-                                    <Link to='/profile' className='nav-link'>
-                                        Profile
-                                    </Link>
-                                </li>
+                                {!user.isDriver ? (
+                                    <>
+                                        <li className='nav-item'>
+                                            <Link
+                                                to='/placedorders'
+                                                className='nav-link'>
+                                                Placed Orders
+                                            </Link>
+                                        </li>
+                                    </>
+                                ) : (
+                                    <></>
+                                )}
                             </>
                         )
                     ) : (
@@ -67,11 +71,23 @@ function App() {
                                     </li>
                                 </>
                             ) : (
-                                <li className='nav-item'>
-                                    <Link to='/cart' className='nav-link'>
-                                        Cart
-                                    </Link>
-                                </li>
+                                <>
+                                    {!user.isDriver ? (
+                                        <li className='nav-item'>
+                                            <Link
+                                                to='/cart'
+                                                className='nav-link'>
+                                                Cart
+                                            </Link>
+                                        </li>
+                                    ) : (
+                                        <>
+                                            <div className='nav-item nav-link mr-5'>
+                                                Driver
+                                            </div>
+                                        </>
+                                    )}
+                                </>
                             )}
                             <li className='nav-item'>
                                 <button

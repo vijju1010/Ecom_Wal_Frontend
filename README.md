@@ -69,59 +69,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
-<section className='vh-100 gradient-custom'>
-    <div className='fw-bold mb-2 text-uppercase'>
-        <h2>Products</h2>
-    </div>
-    {products.map((product) => {
-        return (
-            <div key={product.id}>
-                {/* <img src={product.image} alt={product.name} /> */}
-                <p>{product.productname}</p>
-                <p>{product.price}</p>
-                {user.isAdmin ? (
-                    <>
-                        <button
-                            onClick={() =>
-                                dispatch(
-                                    disableProductAsync(
-                                        product.id,
-                                        product.disabled
-                                    )
-                                )
-                            }>
-                            {product.disabled ? 'Enable' : 'Disable'}
-                        </button>
-                    </>
-                ) : (
-                    <>
-                        {product.disabled ? (
-                            <p>disabled</p>
-                        ) : (
-                            <>
-                                <button
-                                    onClick={() =>
-                                        dispatch(
-                                            addToCartAsync(
-                                                product.id,
-                                                localStorage.getItem('token')
-                                            )
-                                        )
-                                    }>
-                                    Add to Cart
-                                </button>
-                                <br />
-                                <button
-                                    onClick={() =>
-                                        dispatch(placeOrderAsync(product.id))
-                                    }>
-                                    Buy Now
-                                </button>
-                            </>
-                        )}
-                    </>
-                )}
-            </div>
-        );
-    })}
-</section>;
+driver 
+    show orders
+    accept order
+    change status of the order
+    

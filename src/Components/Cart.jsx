@@ -14,7 +14,6 @@ const Cart = () => {
     useEffect(() => {
         dispatch(getCartAsync());
     }, [dispatch]);
-    console.log(cart);
     return (
         <div>
             {cart.length > 0 ? (

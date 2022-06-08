@@ -150,7 +150,6 @@ export const addToCartAsync = (productId, token) => async (dispatch) => {
 };
 
 export const placeOrderAsync = (productId) => async (dispatch) => {
-    console.log(productId);
     const token = localStorage.getItem('token');
     if (token) {
         const response = await fetch('http://localhost:3000/api/placeorder', {
@@ -196,6 +195,29 @@ export const setOrderStatusAsync = (orderId, status) => async (dispatch) => {
         dispatch(setErrorMessage("Can't accept order"));
     }
 };
+
+export const getReceivedOrdersforDriverAsync =
+    (driverId) => async (dispatch) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            const response = await fetch(
+                `http://localhost:3000/driver/getreceivedorders/${driverId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            const data = await response.json();
+            if (data.success) {
+                dispatch(setReceivedOrders(data.orders));
+            } else {
+                dispatch(setErrorMessage(data.error));
+            }
+        } else {
+            dispatch(setErrorMessage("Can't get orders"));
+        }
+    };
 
 export const cancelOrderAsync = (orderId) => async (dispatch) => {
     const token = localStorage.getItem('token');

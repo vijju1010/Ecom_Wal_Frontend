@@ -2,20 +2,24 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import {
-    getReceivedOrdersAsync,
+    getReceivedOrdersforDriverAsync,
     setOrderStatusAsync,
 } from '../Store/products.slice';
 import '../App.css';
-
-const ReceivedOrders = () => {
+const Driver = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { user } = useSelector((state) => state.user);
     const { receivedorders } = useSelector((state) => state.products);
+    // console.log(user);
     console.log(receivedorders);
     var c = 1;
     useEffect(() => {
-        dispatch(getReceivedOrdersAsync());
-    }, [dispatch]);
+        // dispatch(getReceivedOrdersforDriverAsync(user.id));
+        user.isLoggedIn
+            ? dispatch(getReceivedOrdersforDriverAsync(user.id))
+            : console.log(user, 'user');
+    }, [dispatch, user.isLoggedIn]);
     return (
         <div>
             {receivedorders.length > 0 ? (
@@ -25,11 +29,13 @@ const ReceivedOrders = () => {
                             <tr>
                                 <th>S No</th>
                                 <th>User Name</th>
+                                <th>Phone Number</th>
+                                <th>Address</th>
                                 <th>Order ID</th>
                                 <th>Product </th>
                                 <th>Price</th>
                                 <th>Order Date</th>
-                                <th>Order Status</th>
+                                <th>Order Status from Admin</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -39,6 +45,8 @@ const ReceivedOrders = () => {
                                     <tr key={index}>
                                         <td>{c++}</td>
                                         <td>{user.name}</td>
+                                        <td>{user.phonenumber}</td>
+                                        <td>{order.address}</td>
                                         <td>{order.id}</td>
                                         <td>
                                             {order.orderProducts[0].productname}
@@ -47,6 +55,11 @@ const ReceivedOrders = () => {
                                         <td>{order.createdAt}</td>
                                         <td>{order.status}</td>
                                         <td>
+                                            <button className='btn btn-primary'>
+                                                Accept Order
+                                            </button>
+                                        </td>
+                                        {/* <td>
                                             {order.status ===
                                             'Order Accepted Yet Pick Up from Store' ? (
                                                 <>
@@ -79,7 +92,7 @@ const ReceivedOrders = () => {
                                                     </button>
                                                 </>
                                             )}
-                                        </td>
+                                        </td> */}
                                     </tr>
                                 ));
                             })}
@@ -93,4 +106,4 @@ const ReceivedOrders = () => {
     );
 };
 
-export default ReceivedOrders;
+export default Driver;
