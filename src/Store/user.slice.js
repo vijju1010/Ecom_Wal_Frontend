@@ -17,7 +17,11 @@ const initialState = {
         isDriver: false,
         isLoggedIn: false,
     },
+    isLoading: false,
+    addresses: [],
+    errorMessage: '',
     token: null,
+    isTokenVerified: false,
 };
 export const userSlice = createSlice({
     name: 'user',
@@ -31,9 +35,25 @@ export const userSlice = createSlice({
             state.token = action.payload;
             localStorage.setItem('token', action.payload);
         },
+        setErrorMessage: (state, action) => {
+            state.errorMessage = action.payload;
+        },
+        setIsTokenVerified: (state, action) => {
+            state.isTokenVerified = action.payload;
+        },
+        setAddresses: (state, action) => {
+            // console.log('setAddresses', action.payload);
+            state.addresses = action.payload;
+        },
     },
 });
-export const { setUser, setToken } = userSlice.actions;
+export const {
+    setUser,
+    setToken,
+    setErrorMessage,
+    setIsTokenVerified,
+    setAddresses,
+} = userSlice.actions;
 export default userSlice.reducer;
 
 export const loginAsync = (email, password) => async (dispatch) => {
@@ -60,7 +80,38 @@ export const loginAsync = (email, password) => async (dispatch) => {
     }
     return data;
 };
-
+export const forgotPasswordAsync = (email) => async (dispatch) => {
+    const response = await fetch('http://localhost:3000/auth/forgotpassword', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+    });
+    const data = await response.json();
+    if (data.success) {
+        dispatch(setErrorMessage('Email sent'));
+    } else {
+        dispatch(setErrorMessage(data.message));
+    }
+    return data;
+};
+export const resetPasswordAsync = (password, token) => async (dispatch) => {
+    const response = await fetch('http://localhost:3000/auth/resetpassword', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password, token }),
+    });
+    const data = await response.json();
+    if (data.success) {
+        dispatch(setErrorMessage(data.message));
+    } else {
+        dispatch(setErrorMessage(data.message));
+    }
+    return data;
+};
 export const checkAuthAsync = () => async (dispatch) => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -122,6 +173,69 @@ export const RegisterAsync =
         }
         return data;
     };
+
+export const AddAddressAsync = (address) => async (dispatch) => {
+    const token = localStorage.getItem('token');
+    const response = await fetch('http://localhost:3000/api/addaddress', {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ address }),
+    });
+    const data = await response.json();
+    if (data.success) {
+        dispatch(setAddresses(data.addresses));
+    } else {
+        dispatch(setErrorMessage(data.message));
+    }
+    return data;
+};
+
+export const getAddressesAsync = () => async (dispatch) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        const response = await fetch('http://localhost:3000/api/addresses', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        const data = await response.json();
+        // console.log(data.addresses);
+        if (data.success) {
+            dispatch(setAddresses(data.addresses));
+        } else {
+            dispatch(setErrorMessage(data.message));
+        }
+    } else {
+        dispatch(setAddresses([]));
+    }
+};
+
+export const deleteAddressAsync = (addressId) => async (dispatch) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        const response = await fetch(
+            `http://localhost:3000/api/deleteaddress/${addressId}`,
+            {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        const data = await response.json();
+        if (data.success) {
+            dispatch(getAddressesAsync());
+        } else {
+            dispatch(setErrorMessage(data.message));
+        }
+        return data;
+    } else {
+        dispatch(setAddresses([]));
+    }
+};
 
 export const AddDriverAsync =
     (name, email, password, phonenumber) => async (dispatch) => {

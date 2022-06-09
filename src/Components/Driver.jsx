@@ -5,6 +5,7 @@ import {
     getReceivedOrdersforDriverAsync,
     setOrderStatusAsync,
 } from '../Store/products.slice';
+import { checkAuthAsync } from '../Store/user.slice';
 import '../App.css';
 const Driver = () => {
     const dispatch = useDispatch();
@@ -14,6 +15,17 @@ const Driver = () => {
     // console.log(user);
     console.log(receivedorders);
     var c = 1;
+
+    useEffect(() => {
+        dispatch(checkAuthAsync());
+        if (!user.isLoggedIn) {
+            navigate('/login');
+        }
+        if (!user.Driver) {
+            navigate('/');
+        }
+    }, [dispatch]);
+
     useEffect(() => {
         // dispatch(getReceivedOrdersforDriverAsync(user.id));
         user.isLoggedIn
@@ -48,10 +60,38 @@ const Driver = () => {
                                         <td>{user.phonenumber}</td>
                                         <td>{order.address}</td>
                                         <td>{order.id}</td>
+                                        {order.orderProducts.map(
+                                            (product, index) => (
+                                                <div key={index}>
+                                                    {console.log(
+                                                        product,
+                                                        'product'
+                                                    )}
+                                                    <td>
+                                                        {product.productname}
+                                                    </td>
+                                                </div>
+                                            )
+                                        )}
                                         <td>
+                                            {order.orderProducts.map(
+                                                (product, index) => (
+                                                    <div
+                                                        key={index}
+                                                        className='mt-1'>
+                                                        {console.log(
+                                                            product,
+                                                            'product'
+                                                        )}
+                                                        {product.price}
+                                                    </div>
+                                                )
+                                            )}
+                                        </td>
+                                        {/* <td>
                                             {order.orderProducts[0].productname}
                                         </td>
-                                        <td>{order.orderProducts[0].price}</td>
+                                        <td>{order.orderProducts[0].price}</td> */}
                                         <td>{order.createdAt}</td>
                                         <td>{order.status}</td>
                                         <td>

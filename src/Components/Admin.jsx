@@ -8,11 +8,13 @@ const Admin = () => {
     const { user } = useSelector((state) => state.user);
     useEffect(() => {
         dispatch(checkAuthAsync());
-        if (!user.isLoggedIn) {
-            navigate('/login');
-        }
-        if (!user.isAdmin) {
-            navigate('/');
+        if (!localStorage.getItem('token')) {
+            if (!user.isLoggedIn) {
+                navigate('/login');
+            }
+            if (!user.isAdmin) {
+                navigate('/');
+            }
         }
     }, [dispatch]);
     return (

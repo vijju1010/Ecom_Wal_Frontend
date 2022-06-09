@@ -1,20 +1,40 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginAsync } from '../Store/user.slice';
-import { Link, useNavigate } from 'react-router-dom';
-const Login = () => {
+import { resetPasswordAsync, setErrorMessage } from '../Store/user.slice';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const Resetpassword = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { user } = useSelector((state) => state.user);
+    const { errorMessage } = useSelector((state) => state.user);
+    const { isTokenVerified } = useSelector((state) => state.user);
+
+    console.log(errorMessage, 'errorMessage');
     useEffect(() => {
         if (user.isLoggedIn) {
             navigate('/');
         }
     }, [user, navigate]);
 
+    useEffect(() => {
+        if (errorMessage !== '') {
+            toast.success(errorMessage);
+            dispatch(setErrorMessage(''));
+            // navigate('/login');
+        }
+    }, [dispatch, errorMessage]);
+    const token = useParams().token;
+
     const submitHandler = (e) => {
         e.preventDefault();
-        dispatch(loginAsync(e.target.email.value, e.target.password.value));
+        if (e.target.password.value === e.target.cnfpassword.value) {
+            dispatch(resetPasswordAsync(e.target.password.value, token));
+        } else {
+            toast.error('Passwords do not match');
+        }
     };
     return (
         <div>
@@ -27,24 +47,9 @@ const Login = () => {
                                     <div className='md-5 mt-md-4 pb-5'>
                                         <form onSubmit={submitHandler}>
                                             <div className='fw-bold mb-2 text-uppercase'>
-                                                <h2>Login</h2>
+                                                <h2>Reset Password</h2>
                                             </div>
-                                            <div className='form-outline form-white mb-4'>
-                                                <input
-                                                    type='email'
-                                                    name='email'
-                                                    required
-                                                    placeholder='Email'
-                                                    id='typeEmailX'
-                                                    className='form-control form-control-lg'
-                                                />
-                                                <label
-                                                    className='form-label'
-                                                    htmlFor='typeEmailX'>
-                                                    Email
-                                                </label>
-                                            </div>
-                                            <div className='form-outline form-white mb-4'>
+                                            <div className='form-outline form-white mb-4 mt-4'>
                                                 <input
                                                     type='password'
                                                     required
@@ -59,16 +64,32 @@ const Login = () => {
                                                     Password
                                                 </label>
                                             </div>
+                                            <div className='form-outline form-white mb-4'>
+                                                <input
+                                                    type='password'
+                                                    required
+                                                    id='typecnfPasswordX'
+                                                    placeholder='Confirm Password'
+                                                    name='cnfpassword'
+                                                    className='form-control form-control-lg'
+                                                />
+                                                <label
+                                                    className='form-label'
+                                                    htmlFor='typecnfPasswordX'>
+                                                    Password
+                                                </label>
+                                            </div>
+
                                             <button
                                                 className='btn btn-outline-light btn-lg px-5 mb-2'
                                                 type='submit'>
-                                                Login
+                                                Submit
                                             </button>
                                             <p className='small'>
                                                 <Link
                                                     className='text-white-50'
-                                                    to='/forgotpassword'>
-                                                    Forgot Password?
+                                                    to='/login'>
+                                                    login
                                                 </Link>
                                             </p>
                                             <p className='small pb-lg-2'>
@@ -81,6 +102,11 @@ const Login = () => {
                                         </form>
                                     </div>
                                 </div>
+                                <div>
+                                    <p className='text-white-50'>
+                                        <ToastContainer position='bottom-center' />
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -90,4 +116,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Resetpassword;

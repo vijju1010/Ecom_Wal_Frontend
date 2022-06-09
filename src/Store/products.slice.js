@@ -274,7 +274,7 @@ export const getPlacedOrdersAsync = () => async (dispatch) => {
         });
         const data = await response.json();
         if (data.success) {
-            console.log('Orders placed', data.placedorders);
+            // console.log('Orders placed', data.placedorders);
             dispatch(setPlacedOrders(data.placedorders));
         } else {
             dispatch(setErrorMessage("Can't get placed orders"));

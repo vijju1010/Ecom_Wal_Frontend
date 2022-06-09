@@ -4,9 +4,9 @@ import { useNavigate, Link } from 'react-router-dom';
 import {
     getCategoriesAsync,
     addCategoryAsync,
-    addProductAsync,
+    // addProductAsync,
 } from '../Store/products.slice';
-import { AddDriverAsync } from '../Store/user.slice';
+// import { AddDriverAsync } from '../Store/user.slice';
 import { checkAuthAsync } from '../Store/user.slice';
 
 const AddCategoryOrProduct = () => {

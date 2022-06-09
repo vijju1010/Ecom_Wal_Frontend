@@ -7,11 +7,19 @@ import {
     checkoutCartAsync,
     placeOrderAsync,
 } from '../Store/products.slice';
+import { checkAuthAsync } from '../Store/user.slice';
 const Cart = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { cart } = useSelector((state) => state.products);
     const { user } = useSelector((state) => state.user);
+    useEffect(() => {
+        dispatch(checkAuthAsync());
+        if (!user.isLoggedIn) {
+            navigate('/login');
+        }
+    }, [user.isLoggedIn, navigate]);
+
     useEffect(() => {
         dispatch(getCartAsync());
     }, [dispatch]);

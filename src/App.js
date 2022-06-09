@@ -19,35 +19,43 @@ function App() {
                     <img src={logo} alt='logo' width='30' height='30' />
                     <span className='d-none d-sm-inline-block'>ECOM</span>
                 </Link>
-                <div className='collapse navbar-collapse'>
-                    {/* <ul className='navbar-nav  mr-auto mt-2 mt-lg-0'>
-                        <li className='nav-item active'>
-                            <Link to='/products' className='nav-link'>
-                                Products
-                            </Link>
-                        </li>
-                    </ul> */}
-                </div>
+                <div className='collapse navbar-collapse' />
                 <div className='navbar-nav ml-auto p-2'>
                     {user.isLoggedIn ? (
                         user.isAdmin ? (
-                            <>
-                                <li className='nav-item'>
-                                    <Link to='/admin' className='nav-link'>
-                                        Admin
-                                    </Link>
-                                </li>
-                            </>
+                            <></>
                         ) : (
                             <>
                                 {!user.isDriver ? (
                                     <>
-                                        <li className='nav-item'>
-                                            <Link
-                                                to='/placedorders'
-                                                className='nav-link'>
-                                                Placed Orders
-                                            </Link>
+                                        <li className='nav-item dropdown'>
+                                            <div
+                                                style={{
+                                                    cursor: 'pointer',
+                                                }}
+                                                className='nav-link  dropdown-toggle'
+                                                data-bs-toggle='dropdown'>
+                                                {' '}
+                                                Profile
+                                            </div>
+                                            <ul className='dropdown-menu border-0 mt-0'>
+                                                <li>
+                                                    <Link
+                                                        to='/placedorders'
+                                                        className='dropdown-item'>
+                                                        {' '}
+                                                        Placed Orders
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link
+                                                        to='/address'
+                                                        className='dropdown-item'>
+                                                        {' '}
+                                                        Add Address
+                                                    </Link>
+                                                </li>
+                                            </ul>
                                         </li>
                                     </>
                                 ) : (
@@ -61,15 +69,61 @@ function App() {
                     {user.isLoggedIn ? (
                         <>
                             {user.isAdmin ? (
-                                <>
-                                    <li className='nav-item'>
-                                        <Link
-                                            to='/receivedorders'
-                                            className='nav-link'>
-                                            Received Orders
-                                        </Link>
+                                <div className='px-5 '>
+                                    <li className='nav-item dropdown'>
+                                        <div
+                                            style={{
+                                                cursor: 'pointer',
+                                            }}
+                                            className='nav-link  dropdown-toggle'
+                                            data-bs-toggle='dropdown'>
+                                            {' '}
+                                            Admin
+                                        </div>
+                                        <ul className='dropdown-menu border-0 mt-0'>
+                                            <li>
+                                                <Link
+                                                    to='/receivedorders'
+                                                    className='dropdown-item '>
+                                                    {' '}
+                                                    Received Orders
+                                                </Link>
+                                            </li>{' '}
+                                            <li>
+                                                <Link
+                                                    to='/categories'
+                                                    className='dropdown-item'>
+                                                    {' '}
+                                                    Categories
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    to='/add-category'
+                                                    className='dropdown-item'>
+                                                    {' '}
+                                                    Add Category
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    to='/add-product'
+                                                    className='dropdown-item'>
+                                                    {' '}
+                                                    Add Product
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    to='/adddriver'
+                                                    className='dropdown-item'>
+                                                    {' '}
+                                                    Add Driver
+                                                </Link>
+                                            </li>
+                                        </ul>
                                     </li>
-                                </>
+                                </div>
                             ) : (
                                 <>
                                     {!user.isDriver ? (

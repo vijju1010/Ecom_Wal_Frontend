@@ -11,11 +11,18 @@ const ReceivedOrders = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { receivedorders } = useSelector((state) => state.products);
-    console.log(receivedorders);
+    const { user } = useSelector((state) => state.user);
+    // console.log(receivedorders);
     var c = 1;
     useEffect(() => {
+        if (!localStorage.getItem('token')) {
+            if (!user.isLoggedIn) {
+                navigate('/login');
+            }
+        }
         dispatch(getReceivedOrdersAsync());
     }, [dispatch]);
+
     return (
         <div>
             {receivedorders.length > 0 ? (
@@ -40,10 +47,34 @@ const ReceivedOrders = () => {
                                         <td>{c++}</td>
                                         <td>{user.name}</td>
                                         <td>{order.id}</td>
+                                        {order.orderProducts.map(
+                                            (product, index) => (
+                                                <div key={index}>
+                                                    {console.log(
+                                                        product,
+                                                        'product'
+                                                    )}
+                                                    <td>
+                                                        {product.productname}
+                                                    </td>
+                                                </div>
+                                            )
+                                        )}
                                         <td>
-                                            {order.orderProducts[0].productname}
+                                            {order.orderProducts.map(
+                                                (product, index) => (
+                                                    <div
+                                                        key={index}
+                                                        className='mt-1'>
+                                                        {console.log(
+                                                            product,
+                                                            'product'
+                                                        )}
+                                                        {product.price}
+                                                    </div>
+                                                )
+                                            )}
                                         </td>
-                                        <td>{order.orderProducts[0].price}</td>
                                         <td>{order.createdAt}</td>
                                         <td>{order.status}</td>
                                         <td>

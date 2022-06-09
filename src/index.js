@@ -21,6 +21,10 @@ import { Product } from './Components/Product';
 import AddDriver from './Components/AddDriver';
 import AddProduct from './Components/AddProduct';
 import Driver from './Components/Driver';
+import Forgotpassword from './Components/Forgotpassword';
+import Resetpassword from './Components/Resetpassword';
+import Address from './Components/Address';
+import Home from './Components/Home';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
@@ -28,13 +32,22 @@ root.render(
             <BrowserRouter>
                 <App />
                 <Routes>
-                    <Route path='/' element={<Categories />} />
+                    <Route path='/' element={<Home />} />
                     <Route path='/login' element={<Login />} />
                     <Route path='/Signup' element={<SignUp />} />
+                    <Route
+                        path='/forgotpassword'
+                        element={<Forgotpassword />}
+                    />
+                    <Route
+                        path='/resetpassword/:token'
+                        element={<Resetpassword />}
+                    />
                     <Route path='/admin' element={<Admin />} />
                     <Route path='/adddriver' element={<AddDriver />} />
 
                     <Route path='/profile' element={<Profile />} />
+                    <Route path='/address' element={<Address />} />
                     <Route path='/driver' element={<Driver />} />
 
                     <Route
