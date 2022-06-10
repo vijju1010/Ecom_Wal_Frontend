@@ -12,6 +12,7 @@ function App() {
     useEffect(() => {
         dispatch(checkAuthAsync());
     }, [dispatch, navigate, user.isLoggedIn]);
+    // console.log(process.env.REACT_APP_API_URL);
     return (
         <div>
             <div className='navbar navbar-expand-lg  navbar-dark bg-dark sticky-top'>

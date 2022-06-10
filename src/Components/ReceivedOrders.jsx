@@ -12,7 +12,7 @@ const ReceivedOrders = () => {
     const navigate = useNavigate();
     const { receivedorders } = useSelector((state) => state.products);
     const { user } = useSelector((state) => state.user);
-    // console.log(receivedorders);
+    console.log(receivedorders);
     var c = 1;
     useEffect(() => {
         if (!localStorage.getItem('token')) {
@@ -50,10 +50,6 @@ const ReceivedOrders = () => {
                                         {order.orderProducts.map(
                                             (product, index) => (
                                                 <div key={index}>
-                                                    {console.log(
-                                                        product,
-                                                        'product'
-                                                    )}
                                                     <td>
                                                         {product.productname}
                                                     </td>
@@ -66,10 +62,6 @@ const ReceivedOrders = () => {
                                                     <div
                                                         key={index}
                                                         className='mt-1'>
-                                                        {console.log(
-                                                            product,
-                                                            'product'
-                                                        )}
                                                         {product.price}
                                                     </div>
                                                 )

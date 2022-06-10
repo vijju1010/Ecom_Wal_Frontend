@@ -11,6 +11,7 @@ const PlacedOrders = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { placedorders } = useSelector((state) => state.products);
+    console.log(placedorders);
     const { user } = useSelector((state) => state.user);
     useEffect(() => {
         dispatch(getPlacedOrdersAsync());
@@ -102,7 +103,7 @@ const PlacedOrders = () => {
                     </div>
                 </>
             ) : (
-                <>{console.log(placedorders.orders, 'placedorders')}</>
+                <></>
             )}
         </div>
     );

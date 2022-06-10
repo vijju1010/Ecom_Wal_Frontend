@@ -159,7 +159,7 @@ export const placeOrderAsync = (productId, addressId) => async (dispatch) => {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({ productId }),
+            body: JSON.stringify({ productId, addressId }),
         });
         const data = await response.json();
         if (data.success) {
