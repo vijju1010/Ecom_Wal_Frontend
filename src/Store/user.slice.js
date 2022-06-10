@@ -18,6 +18,7 @@ const initialState = {
         isLoggedIn: false,
     },
     isLoading: false,
+    address: '',
     addresses: [],
     errorMessage: '',
     token: null,
@@ -45,6 +46,10 @@ export const userSlice = createSlice({
             // console.log('setAddresses', action.payload);
             state.addresses = action.payload;
         },
+        setAddress: (state, action) => {
+            // console.log('setAddresses', action.payload);
+            state.addresses = action.payload;
+        },
     },
 });
 export const {
@@ -53,6 +58,7 @@ export const {
     setErrorMessage,
     setIsTokenVerified,
     setAddresses,
+    setAddress,
 } = userSlice.actions;
 export default userSlice.reducer;
 
@@ -258,6 +264,29 @@ export const AddDriverAsync =
             console.log('driver added');
         }
     };
+
+export const getAddressByIdAsync = (addressId) => async (dispatch) => {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+        const response = await fetch(
+            `http://localhost:3000/api/address/${addressId}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        const data = await response.json();
+        if (data.success) {
+            console.log(data);
+            dispatch(setAddress(data.address));
+        } else {
+            dispatch(setErrorMessage(data.message));
+        }
+        return data;
+    }
+};
 
 export const logout = () => (dispatch) => {
     dispatch(setUser(nullUser));

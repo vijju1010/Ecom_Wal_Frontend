@@ -7,14 +7,19 @@ import {
     checkoutCartAsync,
     placeOrderAsync,
 } from '../Store/products.slice';
-import { checkAuthAsync } from '../Store/user.slice';
+import { ToastContainer, toast } from 'react-toastify';
+
+import { checkAuthAsync, getAddressesAsync } from '../Store/user.slice';
 const Cart = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { cart } = useSelector((state) => state.products);
     const { user } = useSelector((state) => state.user);
+    const { addresses } = useSelector((state) => state.user);
+    const [address, setAddress] = React.useState('');
     useEffect(() => {
         dispatch(checkAuthAsync());
+        dispatch(getAddressesAsync());
         if (!user.isLoggedIn) {
             navigate('/login');
         }
@@ -27,6 +32,8 @@ const Cart = () => {
         <div>
             {cart.length > 0 ? (
                 <>
+                    <ToastContainer position='bottom-center' />
+
                     <div className='container mt-5'>
                         <div className='card-deck'>
                             {cart.map((product, index) => (
@@ -108,10 +115,48 @@ const Cart = () => {
                             ))}
                         </div>
                         <div className='text-center w-100'>
+                            <div>
+                                {addresses &&
+                                !user.isAdmin &&
+                                !user.isDriver &&
+                                addresses.length > 0 ? (
+                                    <>
+                                        <select
+                                            name='address'
+                                            className='form-control'
+                                            onChange={(e) =>
+                                                setAddress(e.target.value)
+                                            }>
+                                            <option value=''>
+                                                Select Address
+                                            </option>
+                                            {addresses.map((address, index) => (
+                                                <option
+                                                    key={index}
+                                                    value={address.id}>
+                                                    {address.address}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </>
+                                ) : (
+                                    <div className='text-center'>
+                                        <button
+                                            className='btn btn btn-light'
+                                            onClick={() =>
+                                                navigate(`/address`)
+                                            }>
+                                            Add Address
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
                             <button
                                 className='btn btn-info'
                                 onClick={() => {
-                                    dispatch(checkoutCartAsync());
+                                    address === ''
+                                        ? toast('Please select an address')
+                                        : dispatch(checkoutCartAsync(address));
                                 }}>
                                 Checkout Cart
                             </button>

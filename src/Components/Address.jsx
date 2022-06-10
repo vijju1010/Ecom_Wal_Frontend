@@ -40,7 +40,7 @@ const Address = () => {
                     paddingLeft: '100px',
                 }}>
                 <GooglePlacesAutocomplete
-                    apiKey='AIzaSyDTDOg8YknLwNmyPUu2CspUj-NxFzcDm6g'
+                    apiKey={process.env.REACT_APP_GOOGLE_API_KEY}
                     selectProps={{
                         value,
                         onChange: setValue,

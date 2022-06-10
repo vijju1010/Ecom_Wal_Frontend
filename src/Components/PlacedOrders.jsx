@@ -11,6 +11,7 @@ const PlacedOrders = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { placedorders } = useSelector((state) => state.products);
+    // const { address } = useSelector((state) => state.user);
     console.log(placedorders);
     const { user } = useSelector((state) => state.user);
     useEffect(() => {

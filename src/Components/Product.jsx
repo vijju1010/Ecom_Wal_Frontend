@@ -1,25 +1,31 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams, Link } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+
 import {
     getProductAsync,
     placeOrderAsync,
     addToCartAsync,
     disableProductAsync,
 } from '../Store/products.slice';
+import { getAddressesAsync } from '../Store/user.slice';
 export const Product = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { product } = useSelector((state) => state.products);
     const { user } = useSelector((state) => state.user);
-
+    const { addresses } = useSelector((state) => state.user);
+    const [address, setAddress] = React.useState('');
     const { productId } = useParams();
     useEffect(() => {
         dispatch(getProductAsync(productId));
+        dispatch(getAddressesAsync());
     }, [dispatch, productId]);
     console.log(product, 'product');
     return (
         <div>
+            <ToastContainer position='bottom-center' />
             <div className='container mt-5'>
                 <div className='card-deck'>
                     <div className='card p-2 w-25 ml-2 mt-3 mb-3'>
@@ -40,6 +46,44 @@ export const Product = () => {
                                     Price : {product.price}
                                 </div>
                             </div>
+
+                            <div>
+                                {addresses &&
+                                !user.isAdmin &&
+                                !user.isDriver &&
+                                addresses.length > 0 ? (
+                                    <>
+                                        <select
+                                            name='address'
+                                            className='form-control'
+                                            onChange={(e) =>
+                                                setAddress(e.target.value)
+                                            }>
+                                            <option value=''>
+                                                Select Address
+                                            </option>
+                                            {addresses.map((address, index) => (
+                                                <option
+                                                    key={index}
+                                                    value={address.id}>
+                                                    {address.address}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </>
+                                ) : (
+                                    <div className='text-center'>
+                                        <button
+                                            className='btn btn btn-light'
+                                            onClick={() =>
+                                                navigate(`/address`)
+                                            }>
+                                            Add Address
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+
                             <div className='card-footer rounded'>
                                 <div className='d-flex justify-content-around'>
                                     {user.isAdmin ? (
@@ -87,14 +131,19 @@ export const Product = () => {
                                                             <br />
                                                             <button
                                                                 className='btn btn-primary ml-2'
-                                                                onClick={() =>
-                                                                    dispatch(
-                                                                        placeOrderAsync(
-                                                                            product.id,
-                                                                            11
-                                                                        )
-                                                                    )
-                                                                }>
+                                                                onClick={() => {
+                                                                    address ===
+                                                                    ''
+                                                                        ? toast(
+                                                                              'Please select an address'
+                                                                          )
+                                                                        : dispatch(
+                                                                              placeOrderAsync(
+                                                                                  product.id,
+                                                                                  address
+                                                                              )
+                                                                          );
+                                                                }}>
                                                                 Buy Now
                                                             </button>
                                                         </>

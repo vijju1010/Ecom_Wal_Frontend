@@ -196,9 +196,10 @@ export const setOrderStatusAsync = (orderId, status) => async (dispatch) => {
         dispatch(setErrorMessage("Can't accept order"));
     }
 };
-export const checkoutCartAsync = () => async (dispatch) => {
+export const checkoutCartAsync = (addressId) => async (dispatch) => {
     const token = localStorage.getItem('token');
-    const { addressId, totalprice } = { addressId: 11, totalprice: '100' };
+    console.log(addressId, 'addressId');
+    const { totalprice } = { totalprice: '100' };
     if (token) {
         const response = await fetch('http://localhost:3000/api/checkout', {
             method: 'POST',
