@@ -8,12 +8,14 @@ import {
     deleteAddressAsync,
 } from '../Store/user.slice';
 
+import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+
 const Address = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { user } = useSelector((state) => state.user);
     const { addresses } = useSelector((state) => state.user);
-    console.log(addresses);
+    // console.log(addresses);
     useEffect(() => {
         dispatch(checkAuthAsync());
         dispatch(getAddressesAsync());
@@ -23,9 +25,11 @@ const Address = () => {
             }
         }
     }, [dispatch, user.isLoggedIn]);
+    const [value, setValue] = React.useState(null);
 
     const AddAddressHandler = (e) => {
         e.preventDefault();
+        console.log(value, 'address');
         dispatch(AddAddressAsync(e.target.address.value));
     };
     return (
@@ -35,6 +39,13 @@ const Address = () => {
                 style={{
                     paddingLeft: '100px',
                 }}>
+                <GooglePlacesAutocomplete
+                    apiKey='api-key'
+                    selectProps={{
+                        value,
+                        onChange: setValue,
+                    }}
+                />
                 <form onSubmit={AddAddressHandler}>
                     <div className='form-outline form-white mb-4 w-50 mt-1'>
                         <label className='form-label' htmlFor='typeaddressX'>
@@ -67,15 +78,15 @@ const Address = () => {
                                 <div className='flex-column'>
                                     {address.address}
                                 </div>
-                                {/* <button className='flex-column btn bg-danger'
+                                <button
+                                    className='flex-column btn bg-danger'
                                     onClick={() => {
                                         dispatch(
                                             deleteAddressAsync(address.id)
                                         );
-                                    }}
-                                >
+                                    }}>
                                     X
-                                </button> */}
+                                </button>
                             </div>
                         );
                     })}

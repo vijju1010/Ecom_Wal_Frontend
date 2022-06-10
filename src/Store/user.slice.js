@@ -186,7 +186,7 @@ export const AddAddressAsync = (address) => async (dispatch) => {
     });
     const data = await response.json();
     if (data.success) {
-        dispatch(setAddresses(data.addresses));
+        dispatch(getAddressesAsync());
     } else {
         dispatch(setErrorMessage(data.message));
     }

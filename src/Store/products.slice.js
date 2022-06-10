@@ -149,7 +149,8 @@ export const addToCartAsync = (productId, token) => async (dispatch) => {
     }
 };
 
-export const placeOrderAsync = (productId) => async (dispatch) => {
+export const placeOrderAsync = (productId, addressId) => async (dispatch) => {
+    console.log(addressId, 'addressId');
     const token = localStorage.getItem('token');
     if (token) {
         const response = await fetch('http://localhost:3000/api/placeorder', {
