@@ -198,7 +198,7 @@ export const setOrderStatusAsync = (orderId, status) => async (dispatch) => {
 };
 export const checkoutCartAsync = () => async (dispatch) => {
     const token = localStorage.getItem('token');
-    const { address, totalprice } = { address: 'vskp', totalprice: '100' };
+    const { addressId, totalprice } = { addressId: 11, totalprice: '100' };
     if (token) {
         const response = await fetch('http://localhost:3000/api/checkout', {
             method: 'POST',
@@ -206,7 +206,7 @@ export const checkoutCartAsync = () => async (dispatch) => {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({ address, totalprice }),
+            body: JSON.stringify({ addressId, totalprice }),
         });
         const data = await response.json();
         if (data.success) {

@@ -90,7 +90,8 @@ export const Product = () => {
                                                                 onClick={() =>
                                                                     dispatch(
                                                                         placeOrderAsync(
-                                                                            product.id
+                                                                            product.id,
+                                                                            11
                                                                         )
                                                                     )
                                                                 }>
