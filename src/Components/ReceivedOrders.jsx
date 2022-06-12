@@ -12,8 +12,11 @@ const ReceivedOrders = () => {
     const navigate = useNavigate();
     const { receivedorders } = useSelector((state) => state.products);
     const { user } = useSelector((state) => state.user);
-    console.log(receivedorders);
+    // console.log(receivedorders);
     var c = 1;
+
+    const [filter, setFilter] = React.useState('ALL');
+    console.log(filter);
     useEffect(() => {
         if (!localStorage.getItem('token')) {
             if (!user.isLoggedIn) {
@@ -27,7 +30,69 @@ const ReceivedOrders = () => {
         <div>
             {receivedorders.length > 0 ? (
                 <>
-                    <table className='table table-striped table-light table-hover table-responsive table-sortable mt-5 container border py-2'>
+                    <div
+                        className='text-center mt-5 h6 justify-content-between d-flex flex-wrap container border py-2'
+                        style={{ backgroundColor: '#f5f5f5' }}>
+                        <div>
+                            <label htmlFor='all'>AllOrders</label>
+                            <input
+                                type='radio'
+                                name='filter'
+                                id='all'
+                                defaultChecked
+                                onClick={() => {
+                                    setFilter('ALL');
+                                }}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor='Accepted'>Accepted</label>
+                            <input
+                                type='radio'
+                                name='filter'
+                                id='Accepted'
+                                onChange={() => {
+                                    setFilter('ACCEPTED');
+                                }}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor='Delivered'>Delivered</label>
+                            <input
+                                type='radio'
+                                name='filter'
+                                id='Delivered'
+                                onChange={() => {
+                                    setFilter('DELIVERED');
+                                }}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor='OutForDelivery'>
+                                OutForDelivery
+                            </label>
+                            <input
+                                type='radio'
+                                name='filter'
+                                id='OutForDelivery'
+                                onChange={() => {
+                                    setFilter('OUT_FOR_DELIVERY');
+                                }}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor='Cancelled'>Cancelled</label>
+                            <input
+                                type='radio'
+                                name='filter'
+                                id='Cancelled'
+                                onChange={() => {
+                                    setFilter('CANCELED');
+                                }}
+                            />
+                        </div>
+                    </div>
+                    <table className='table mt-0 table-striped table-light table-hover table-responsive table-sortable mt-5 container border py-2'>
                         <thead>
                             <tr>
                                 <th>S No</th>
@@ -41,70 +106,287 @@ const ReceivedOrders = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {receivedorders.map((user, index) => {
-                                return user.orders.map((order, index) => (
-                                    <tr key={index}>
-                                        <td>{c++}</td>
-                                        <td>{user.name}</td>
-                                        <td>{order.id}</td>
-                                        {order.orderProducts.map(
-                                            (product, index) => (
-                                                <div key={index}>
-                                                    <td>
-                                                        {product.productname}
-                                                    </td>
-                                                </div>
-                                            )
-                                        )}
-                                        <td>
+                            {receivedorders.map((userItem, index) => {
+                                return userItem.orders.map((order, index) =>
+                                    filter === 'ALL' ? (
+                                        <tr key={index}>
+                                            <td>{c++}</td>
+                                            <td>{userItem.name}</td>
+                                            <td>{order.id}</td>
                                             {order.orderProducts.map(
                                                 (product, index) => (
-                                                    <div
-                                                        key={index}
-                                                        className='mt-1'>
-                                                        {product.price}
+                                                    <div key={index}>
+                                                        <td>
+                                                            {
+                                                                product.productname
+                                                            }
+                                                        </td>
                                                     </div>
                                                 )
                                             )}
-                                        </td>
-                                        <td>{order.createdAt}</td>
-                                        <td>{order.status}</td>
-                                        <td>
-                                            {order.status ===
-                                            'Order Accepted Yet Pick Up from Store' ? (
-                                                <>
-                                                    <button
-                                                        className='btn btn-primary'
-                                                        onClick={() => {
-                                                            dispatch(
-                                                                setOrderStatusAsync(
-                                                                    order.id,
-                                                                    'Yet To Accept Order'
-                                                                )
-                                                            );
-                                                        }}>
-                                                        Set Order Pending
-                                                    </button>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <button
-                                                        className='btn btn-primary'
-                                                        onClick={() => {
-                                                            dispatch(
-                                                                setOrderStatusAsync(
-                                                                    order.id,
-                                                                    'Order Accepted Yet Pick Up from Store'
-                                                                )
-                                                            );
-                                                        }}>
-                                                        Accept Order
-                                                    </button>
-                                                </>
+                                            <td>
+                                                {order.orderProducts.map(
+                                                    (product, index) => (
+                                                        <div
+                                                            key={index}
+                                                            className='mt-1'>
+                                                            {product.price}
+                                                        </div>
+                                                    )
+                                                )}
+                                            </td>
+                                            <td>{order.createdAt}</td>
+                                            <td>{order.status}</td>
+                                            <td>
+                                                <button
+                                                    className='btn btn-primary'
+                                                    disabled={
+                                                        order.status ===
+                                                            'ACCEPTED' ||
+                                                        order.status ===
+                                                            'CANCELED' ||
+                                                        order.status ===
+                                                            'DELIVERED' ||
+                                                        order.status ===
+                                                            'OUT_FOR_DELIVERY'
+                                                    }
+                                                    onClick={() => {
+                                                        dispatch(
+                                                            setOrderStatusAsync(
+                                                                order.id,
+                                                                'ACCEPTED',
+                                                                user
+                                                            )
+                                                        );
+                                                    }}>
+                                                    Accept Order
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ) : order.status === filter ? (
+                                        <tr key={index}>
+                                            <td>{c++}</td>
+                                            <td>{userItem.name}</td>
+                                            <td>{order.id}</td>
+                                            {order.orderProducts.map(
+                                                (product, index) => (
+                                                    <div key={index}>
+                                                        <td>
+                                                            {
+                                                                product.productname
+                                                            }
+                                                        </td>
+                                                    </div>
+                                                )
                                             )}
-                                        </td>
-                                    </tr>
-                                ));
+                                            <td>
+                                                {order.orderProducts.map(
+                                                    (product, index) => (
+                                                        <div
+                                                            key={index}
+                                                            className='mt-1'>
+                                                            {product.price}
+                                                        </div>
+                                                    )
+                                                )}
+                                            </td>
+                                            <td>{order.createdAt}</td>
+                                            <td>{order.status}</td>
+                                            <td>
+                                                <button
+                                                    className='btn btn-primary'
+                                                    disabled={
+                                                        order.status ===
+                                                            'ACCEPTED' ||
+                                                        order.status ===
+                                                            'CANCELED' ||
+                                                        order.status ===
+                                                            'DELIVERED' ||
+                                                        order.status ===
+                                                            'OUT_FOR_DELIVERY'
+                                                    }
+                                                    onClick={() => {
+                                                        dispatch(
+                                                            setOrderStatusAsync(
+                                                                order.id,
+                                                                'ACCEPTED',
+                                                                user
+                                                            )
+                                                        );
+                                                    }}>
+                                                    Accept Order
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ) : order.status === filter ? (
+                                        <tr key={index}>
+                                            <td>{c++}</td>
+                                            <td>{userItem.name}</td>
+                                            <td>{order.id}</td>
+                                            {order.orderProducts.map(
+                                                (product, index) => (
+                                                    <div key={index}>
+                                                        <td>
+                                                            {
+                                                                product.productname
+                                                            }
+                                                        </td>
+                                                    </div>
+                                                )
+                                            )}
+                                            <td>
+                                                {order.orderProducts.map(
+                                                    (product, index) => (
+                                                        <div
+                                                            key={index}
+                                                            className='mt-1'>
+                                                            {product.price}
+                                                        </div>
+                                                    )
+                                                )}
+                                            </td>
+                                            <td>{order.createdAt}</td>
+                                            <td>{order.status}</td>
+                                            <td>
+                                                <button
+                                                    className='btn btn-primary'
+                                                    disabled={
+                                                        order.status ===
+                                                            'ACCEPTED' ||
+                                                        order.status ===
+                                                            'CANCELED' ||
+                                                        order.status ===
+                                                            'DELIVERED' ||
+                                                        order.status ===
+                                                            'OUT_FOR_DELIVERY'
+                                                    }
+                                                    onClick={() => {
+                                                        dispatch(
+                                                            setOrderStatusAsync(
+                                                                order.id,
+                                                                'ACCEPTED',
+                                                                user
+                                                            )
+                                                        );
+                                                    }}>
+                                                    Accept Order
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ) : order.status === filter ? (
+                                        <tr key={index}>
+                                            <td>{c++}</td>
+                                            <td>{userItem.name}</td>
+                                            <td>{order.id}</td>
+                                            {order.orderProducts.map(
+                                                (product, index) => (
+                                                    <div key={index}>
+                                                        <td>
+                                                            {
+                                                                product.productname
+                                                            }
+                                                        </td>
+                                                    </div>
+                                                )
+                                            )}
+                                            <td>
+                                                {order.orderProducts.map(
+                                                    (product, index) => (
+                                                        <div
+                                                            key={index}
+                                                            className='mt-1'>
+                                                            {product.price}
+                                                        </div>
+                                                    )
+                                                )}
+                                            </td>
+                                            <td>{order.createdAt}</td>
+                                            <td>{order.status}</td>
+                                            <td>
+                                                <button
+                                                    className='btn btn-primary'
+                                                    disabled={
+                                                        order.status ===
+                                                            'ACCEPTED' ||
+                                                        order.status ===
+                                                            'CANCELED' ||
+                                                        order.status ===
+                                                            'DELIVERED' ||
+                                                        order.status ===
+                                                            'OUT_FOR_DELIVERY'
+                                                    }
+                                                    onClick={() => {
+                                                        dispatch(
+                                                            setOrderStatusAsync(
+                                                                order.id,
+                                                                'ACCEPTED',
+                                                                user
+                                                            )
+                                                        );
+                                                    }}>
+                                                    Accept Order
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ) : order.status === filter ? (
+                                        <tr key={index}>
+                                            <td>{c++}</td>
+                                            <td>{userItem.name}</td>
+                                            <td>{order.id}</td>
+                                            {order.orderProducts.map(
+                                                (product, index) => (
+                                                    <div key={index}>
+                                                        <td>
+                                                            {
+                                                                product.productname
+                                                            }
+                                                        </td>
+                                                    </div>
+                                                )
+                                            )}
+                                            <td>
+                                                {order.orderProducts.map(
+                                                    (product, index) => (
+                                                        <div
+                                                            key={index}
+                                                            className='mt-1'>
+                                                            {product.price}
+                                                        </div>
+                                                    )
+                                                )}
+                                            </td>
+                                            <td>{order.createdAt}</td>
+                                            <td>{order.status}</td>
+                                            <td>
+                                                <button
+                                                    className='btn btn-primary'
+                                                    disabled={
+                                                        order.status ===
+                                                            'ACCEPTED' ||
+                                                        order.status ===
+                                                            'CANCELED' ||
+                                                        order.status ===
+                                                            'DELIVERED' ||
+                                                        order.status ===
+                                                            'OUT_FOR_DELIVERY'
+                                                    }
+                                                    onClick={() => {
+                                                        dispatch(
+                                                            setOrderStatusAsync(
+                                                                order.id,
+                                                                'ACCEPTED',
+                                                                user
+                                                            )
+                                                        );
+                                                    }}>
+                                                    Accept Order
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        <></>
+                                    )
+                                );
                             })}
                         </tbody>
                     </table>

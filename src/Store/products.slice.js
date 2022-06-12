@@ -172,30 +172,37 @@ export const placeOrderAsync = (productId, addressId) => async (dispatch) => {
     }
 };
 
-export const setOrderStatusAsync = (orderId, status) => async (dispatch) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-        const response = await fetch(
-            `http://localhost:3000/admin/setorderstatus/${orderId}`,
-            {
-                method: 'PUT',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ status }),
+export const setOrderStatusAsync =
+    (orderId, status, user) => async (dispatch) => {
+        const token = localStorage.getItem('token');
+        console.log(user, 'user');
+        console.log(orderId, status, 'orderId, status');
+        if (token) {
+            const response = await fetch(
+                `http://localhost:3000/admin/setorderstatus/${orderId}`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ status }),
+                }
+            );
+            const data = await response.json();
+            if (data.success) {
+                user.isAdmin
+                    ? dispatch(getReceivedOrdersAsync())
+                    : user.isDriver
+                    ? dispatch(getReceivedOrdersforDriverAsync())
+                    : dispatch(getPlacedOrdersAsync());
+            } else {
+                dispatch(setErrorMessage(data.error));
             }
-        );
-        const data = await response.json();
-        if (data.success) {
-            dispatch(getReceivedOrdersAsync());
         } else {
-            dispatch(setErrorMessage(data.error));
+            dispatch(setErrorMessage("Can't accept order"));
         }
-    } else {
-        dispatch(setErrorMessage("Can't accept order"));
-    }
-};
+    };
 export const checkoutCartAsync = (addressId) => async (dispatch) => {
     const token = localStorage.getItem('token');
     console.log(addressId, 'addressId');

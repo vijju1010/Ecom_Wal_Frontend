@@ -5,6 +5,7 @@ import { MDBDataTable } from 'mdbreact';
 import {
     getPlacedOrdersAsync,
     cancelOrderAsync,
+    setOrderStatusAsync,
 } from '../Store/products.slice';
 import { checkAuthAsync } from '../Store/user.slice';
 const PlacedOrders = () => {
@@ -86,10 +87,18 @@ const PlacedOrders = () => {
                                                 <br />
                                                 <button
                                                     className='btn btn-primary bg-light text-dark'
+                                                    disabled={
+                                                        order.status ===
+                                                            'DELIVERED' ||
+                                                        order.status ===
+                                                            'CANCELED'
+                                                    }
                                                     onClick={() => {
                                                         dispatch(
-                                                            cancelOrderAsync(
-                                                                order.id
+                                                            setOrderStatusAsync(
+                                                                order.id,
+                                                                'CANCELED',
+                                                                user
                                                             )
                                                         );
                                                     }}>
