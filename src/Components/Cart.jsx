@@ -33,7 +33,6 @@ const Cart = () => {
             {cart.length > 0 ? (
                 <>
                     <ToastContainer position='bottom-center' />
-
                     <div className='container mt-5'>
                         <div className='card-deck'>
                             {cart.map((product, index) => (

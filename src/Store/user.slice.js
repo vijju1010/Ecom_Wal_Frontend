@@ -180,15 +180,16 @@ export const RegisterAsync =
         return data;
     };
 
-export const AddAddressAsync = (address) => async (dispatch) => {
+export const AddAddressAsync = (address, latLang) => async (dispatch) => {
     const token = localStorage.getItem('token');
+    console.log(address, latLang, 'address,latlng');
     const response = await fetch('http://localhost:3000/api/addaddress', {
         method: 'POST',
         headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ address }),
+        body: JSON.stringify({ address, latLang }),
     });
     const data = await response.json();
     if (data.success) {

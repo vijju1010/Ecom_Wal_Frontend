@@ -1,14 +1,19 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
+import { GAPIKEY } from '../../secret';
 import {
     checkAuthAsync,
     AddAddressAsync,
     getAddressesAsync,
     deleteAddressAsync,
 } from '../Store/user.slice';
+import { ToastContainer, toast } from 'react-toastify';
 
-import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+import GooglePlacesAutocomplete, {
+    geocodeByAddress,
+    getLatLng,
+} from 'react-google-places-autocomplete';
 
 const Address = () => {
     const dispatch = useDispatch();
@@ -26,45 +31,67 @@ const Address = () => {
         }
     }, [dispatch, user.isLoggedIn]);
     const [value, setValue] = React.useState(null);
+    const [latlng, setLatlng] = React.useState(null);
+    const handleChange = (value) => {
+        console.log(value.label);
+        setValue(value.label);
+        geocodeByAddress(value.label)
+            .then((results) => getLatLng(results[0]))
+            .then(({ lat, lng }) => {
+                setLatlng(JSON.stringify({ lat, lng }));
+                console.log('Successfully got latitude and longitude', {
+                    lat,
+                    lng,
+                });
+                // dispatch(AddAddressAsync(value, JSON.stringify({ lat, lng })));
+            });
+    };
 
     const AddAddressHandler = (e) => {
         e.preventDefault();
         console.log(value, 'address');
-        dispatch(AddAddressAsync(e.target.address.value));
+        dispatch(AddAddressAsync(value, latlng));
+
+        // dispatch(AddAddressAsync(e.target.address.value));
     };
     return (
         <div>
+            <ToastContainer position='bottom-center' />
+
             <div
                 className='container col py-5'
                 style={{
                     paddingLeft: '100px',
                 }}>
-                <GooglePlacesAutocomplete
-                    apiKey={process.env.REACT_APP_GOOGLE_API_KEY}
-                    selectProps={{
-                        value,
-                        onChange: setValue,
-                    }}
-                />
                 <form onSubmit={AddAddressHandler}>
                     <div className='form-outline form-white mb-4 w-50 mt-1'>
                         <label className='form-label' htmlFor='typeaddressX'>
                             Address
                         </label>
+                        <GooglePlacesAutocomplete
+                            apiKey=''
+                            className='form-control form-control-lg'
+                            selectProps={{
+                                value,
+                                onChange: handleChange,
+                            }}
+                        />
                         <input
                             type='text'
+                            value={value}
                             required
+                            disabled
                             id='typeaddressX'
                             placeholder='Address'
                             name='address'
-                            className='form-control form-control-lg'
+                            className='form-control form-control-lg mt-2 mb-2'
                         />
+                        <button
+                            type='submit'
+                            className='btn btn-primary btn-lg btn-block'>
+                            Add Address
+                        </button>
                     </div>
-                    <button
-                        type='submit'
-                        className='btn btn-primary btn-lg btn-block'>
-                        Add Address
-                    </button>
                 </form>
             </div>
 

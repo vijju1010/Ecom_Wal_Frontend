@@ -16,7 +16,7 @@ const ReceivedOrders = () => {
     var c = 1;
 
     const [filter, setFilter] = React.useState('ALL');
-    console.log(filter);
+    // console.log(filter);
     useEffect(() => {
         if (!localStorage.getItem('token')) {
             if (!user.isLoggedIn) {
