@@ -5,6 +5,8 @@ const initialState = {
     categories: [],
     receivedorders: [],
     placedorders: {},
+    routeorders: [],
+    routes: [],
     errorMessage: '',
     product: {},
 };
@@ -38,6 +40,12 @@ export const productsSlice = createSlice({
         setCategories: (state, action) => {
             state.categories = action.payload;
         },
+        setRoutes: (state, action) => {
+            state.routes = action.payload;
+        },
+        setRouteOrders: (state, action) => {
+            state.routeorders = action.payload;
+        },
         setErrorMessage: (state, action) => {
             state.errorMessage = action.payload;
         },
@@ -51,6 +59,8 @@ export const {
     setReceivedOrders,
     setPlacedOrders,
     setProduct,
+    setRoutes,
+    setRouteOrders,
     setErrorMessage,
 } = productsSlice.actions;
 export default productsSlice.reducer;
@@ -249,6 +259,26 @@ export const getReceivedOrdersforDriverAsync =
             dispatch(setErrorMessage("Can't get orders"));
         }
     };
+export const getRoutesForDriverAsync = (driverId) => async (dispatch) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        const response = await fetch(
+            `http://localhost:3000/driver/getroutes/${driverId}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        const data = await response.json();
+        if (data.success) {
+            console.log(data, 'data');
+            dispatch(setRoutes(data.routes));
+        } else {
+            dispatch(setErrorMessage(data.error));
+        }
+    }
+};
 
 export const cancelOrderAsync = (orderId) => async (dispatch) => {
     const token = localStorage.getItem('token');

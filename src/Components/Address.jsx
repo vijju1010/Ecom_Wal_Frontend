@@ -30,7 +30,7 @@ const Address = () => {
             }
         }
     }, [dispatch, user.isLoggedIn]);
-    const [value, setValue] = React.useState(null);
+    const [value, setValue] = React.useState('');
     const [latlng, setLatlng] = React.useState(null);
     const handleChange = (value) => {
         console.log(value.label);

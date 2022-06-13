@@ -25,6 +25,8 @@ import Forgotpassword from './Components/Forgotpassword';
 import Resetpassword from './Components/Resetpassword';
 import Address from './Components/Address';
 import Home from './Components/Home';
+import MapContainer from './Components/MapContainer';
+import RouteMap from './Components/RouteMap';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
@@ -33,6 +35,8 @@ root.render(
                 <App />
                 <Routes>
                     <Route path='/' element={<Home />} />
+                    <Route path='/map' element={<MapContainer />} />
+                    <Route path='/route' element={<RouteMap />} />
                     <Route path='/login' element={<Login />} />
                     <Route path='/Signup' element={<SignUp />} />
                     <Route
