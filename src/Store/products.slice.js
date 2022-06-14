@@ -120,6 +120,29 @@ export const getCartAsync = () => async (dispatch) => {
         }
     }
 };
+export const setOrderForDriverAsync = (orderId) => async (dispatch) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        const response = await fetch('http://localhost:3000/driver/setorder', {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ orderId }),
+        });
+        const data = await response.json();
+        if (data.success) {
+            dispatch(getReceivedOrdersforDriverAsync());
+        } else {
+            dispatch(setErrorMessage("Can't set order"));
+            console.log("Can't set order");
+        }
+    } else {
+        dispatch(setErrorMessage("Can't set order"));
+        console.log("Can't set order");
+    }
+};
 export const removeFromCartAsync = (productId) => async (dispatch) => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -240,6 +263,7 @@ export const checkoutCartAsync = (addressId) => async (dispatch) => {
 export const getReceivedOrdersforDriverAsync =
     (driverId) => async (dispatch) => {
         const token = localStorage.getItem('token');
+        console.log('getrecei');
         if (token) {
             const response = await fetch(
                 `http://localhost:3000/driver/getreceivedorders/${driverId}`,

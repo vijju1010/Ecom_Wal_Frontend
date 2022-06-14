@@ -4,6 +4,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import {
     getReceivedOrdersforDriverAsync,
     setOrderStatusAsync,
+    setOrderForDriverAsync,
+    getRoutesForDriverAsync,
 } from '../Store/products.slice';
 import { checkAuthAsync } from '../Store/user.slice';
 import '../App.css';
@@ -27,6 +29,7 @@ const Driver = () => {
     }, [dispatch]);
 
     useEffect(() => {
+        dispatch(getRoutesForDriverAsync(user.id));
         // dispatch(getReceivedOrdersforDriverAsync(user.id));
         user.isLoggedIn ? (
             dispatch(getReceivedOrdersforDriverAsync(user.id))
@@ -38,6 +41,9 @@ const Driver = () => {
         <>
             {receivedorders.length > 0 ? (
                 <>
+                    <div>
+                        <Link to='/route'>Show route</Link>
+                    </div>
                     <table className='table table-striped table-light table-hover table-responsive table-sortable mt-5 container border py-2'>
                         <thead>
                             <tr>
@@ -51,7 +57,7 @@ const Driver = () => {
                                 <th>Order Date</th>
                                 <th>Order Status from Admin</th>
                                 <th>Accept</th>
-                                <th>Delivery</th>
+                                {/* <th>Delivery</th> */}
                             </tr>
                         </thead>
                         <tbody>
@@ -101,17 +107,22 @@ const Driver = () => {
                                                 className='btn btn-primary'
                                                 onClick={() => {
                                                     dispatch(
-                                                        setOrderStatusAsync(
-                                                            order.id,
-                                                            'OUT_FOR_DELIVERY',
-                                                            user
+                                                        setOrderForDriverAsync(
+                                                            order.id
                                                         )
                                                     );
+                                                    // dispatch(
+                                                    //     setOrderStatusAsync(
+                                                    //         order.id,
+                                                    //         'OUT_FOR_DELIVERY',
+                                                    //         user
+                                                    //     )
+                                                    // );
                                                 }}>
                                                 Accept Order
                                             </button>
                                         </td>{' '}
-                                        <td>
+                                        {/* <td>
                                             <button
                                                 disabled={
                                                     order.status ===
@@ -132,7 +143,7 @@ const Driver = () => {
                                                 }}>
                                                 Set order delivered
                                             </button>
-                                        </td>
+                                        </td> */}
                                     </tr>
                                 ));
                             })}

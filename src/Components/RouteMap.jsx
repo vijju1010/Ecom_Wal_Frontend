@@ -43,6 +43,7 @@ const RouteMap = () => {
         console.log(croutes, 'croutes'),
         (
             <div>
+                <Link to='/'>Back</Link>
                 <ToastContainer position='bottom-center' />
                 <div className='container p-10'>
                     {routes.length > 0 &&
@@ -54,15 +55,23 @@ const RouteMap = () => {
                                     <button
                                         className='btn btn-primary mt-5 w-25'
                                         onClick={() => {
+                                            var temp = [...croutes];
                                             if (index < routes.length - 1) {
-                                                var temp = [...croutes];
                                                 temp[index] = true;
                                                 temp[index + 1] = false;
                                                 setCroutes(temp);
                                             } else {
                                                 temp[index] = true;
+                                                setCroutes(temp);
                                                 toast('orders Completed');
                                             }
+                                            dispatch(
+                                                setOrderStatusAsync(
+                                                    route.orderId,
+                                                    'DELIVERED',
+                                                    user
+                                                )
+                                            );
                                         }}
                                         disabled={croutes[index]}>
                                         {route.address}

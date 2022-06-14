@@ -50,6 +50,7 @@ const ReceivedOrders = () => {
                             <input
                                 type='radio'
                                 name='filter'
+                                className=' '
                                 id='Accepted'
                                 onChange={() => {
                                     setFilter('ACCEPTED');
